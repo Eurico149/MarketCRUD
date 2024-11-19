@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-require('dotenv').config();
 
-const conn = async () => {
-    await mongoose.connect();
-    console.log('Mongo Conectado!');
+const conect = async () => {
+    await mongoose.connect(`mongodb+srv://${process.env.UsrMongo}:${process.env.PassMongo}@testebackend.tm0cy.mongodb.net/?retryWrites=true&w=majority&appName=testeBackEnd`);
 }
+
+module.exports = conect;
