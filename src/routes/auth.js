@@ -8,6 +8,7 @@ router.post('/login', async (req, res) => {
         const userBody = req.body.user;
         const passwordBody = req.body.password;
         const user = await User.findOne({user: userBody});
+
         if (!user) {
             return res.status(400).send({message: 'User Or Password is incorrect'});
         }
@@ -24,18 +25,14 @@ router.post('/login', async (req, res) => {
 router.post('/register', async (req, res) => {
     try {
         const {user, password} = req.body;
-        if (!user) {
-            return res.status(400).send({message: 'Invalid User'});
-        }
-        if (password.length < 6) {
-            return res.status(400).send({message: 'Password must be at least 6 characters'});
-        }
+        if (!user) return res.status(400).send({message: 'Invalid User'});
+        if (password.length < 6) return res.status(400).send({message: 'Password must be at least 6 characters'});
+
         const hashedPassword = await bcrypt.hashSync(password, 10);
         const newUser = new User({user, password: hashedPassword});
         await newUser.save().then(() => res.status(201).send({message: 'User Created Successfully'}));
     } catch (error) {
-        console.log(error);
-        res.status(400).send({message: 'error'});
+        res.status(400).send({message: 'Username Already in Use'});
     }
 })
 
